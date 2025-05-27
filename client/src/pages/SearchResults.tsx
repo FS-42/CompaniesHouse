@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Company } from "../types/company";
+import BasicCompanyCard from "../components/BasicCompanyCard";
 
 export default function SearchResults() {
-  const { query } = useParams();
+  const { query } = useParams<{ query: string }>();
   const [results, setResults] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -32,19 +33,11 @@ export default function SearchResults() {
       {results.length === 0 ? (
         <p>No results found.</p>
       ) : (
-        <ul className="space-y-4">
+        <div className="space-y-4">
           {results.map((company) => (
-            <li key={company.company_number} className="bg-white p-4 rounded shadow">
-              <Link to={`/company/${company.company_number}`}>
-                <h3 className="text-xl font-semibold text-blue-700 hover:underline">
-                  {company.title}
-                </h3>
-              </Link>
-              <p className="text-sm text-gray-600">{company.description}</p>
-              <p className="text-sm">{company.address_snippet}</p>
-            </li>
+            <BasicCompanyCard key={company.company_number} company={company} />
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );
